@@ -2,16 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../../users/user/entities/user.entity';
 import { MealType } from './meal-type.entity';
+import { BaseTimeEntity } from '../../../common/utils/baseTime.entity';
 
 @Entity('meal_records')
-export class MealRecord {
+export class MealRecord extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -26,12 +25,6 @@ export class MealRecord {
 
   @Column({ nullable: true, type: 'text' })
   photoUrl: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'userId' })

@@ -2,15 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/user/entities/user.entity';
 import { Chat } from '../../chats/entities/chat.entity';
+import { BaseTimeEntity } from '../../common/utils/baseTime.entity';
 
 @Entity('messages')
-export class Message {
+export class Message extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,9 +22,6 @@ export class Message {
 
   @Column({ nullable: true, type: 'text' })
   content: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
 
   @ManyToOne(() => Chat, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'chatId' })

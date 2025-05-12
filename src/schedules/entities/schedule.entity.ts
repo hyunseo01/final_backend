@@ -2,15 +2,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/user/entities/user.entity';
+import { BaseTimeEntity } from '../../common/utils/baseTime.entity';
 
 @Entity('schedules')
-export class Schedule {
+export class Schedule extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,12 +21,6 @@ export class Schedule {
 
   @Column({ type: 'time' })
   startTime: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'trainerId' })

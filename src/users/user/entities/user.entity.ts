@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { UserRole } from '../../../common/enums/user-role.enum';
 import {
   IsNotEmpty,
@@ -15,9 +9,10 @@ import {
   IsBoolean,
   IsIn,
 } from 'class-validator';
+import { BaseTimeEntity } from '../../../common/utils/baseTime.entity';
 
 @Entity('users')
-export class User {
+export class User extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -52,36 +47,4 @@ export class User {
   @IsOptional()
   @IsBoolean()
   isDeleted?: boolean;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-}
-
-export class CreateUserDto {
-  @IsNotEmpty()
-  @IsString()
-  @IsIn(['user', 'trainer'])
-  role: 'user' | 'trainer';
-
-  @IsOptional()
-  @IsEmail()
-  @Length(0, 255)
-  email?: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Length(1, 255)
-  password: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @Length(1, 50)
-  name: string;
-
-  @IsOptional()
-  @IsBoolean()
-  is_deleted?: boolean;
 }

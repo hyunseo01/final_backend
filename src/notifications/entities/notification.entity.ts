@@ -2,12 +2,11 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/user/entities/user.entity';
+import { BaseTimeEntity } from '../../common/utils/baseTime.entity';
 
 export enum NotificationType {
   RESERVATION = 'reservation',
@@ -16,7 +15,7 @@ export enum NotificationType {
 }
 
 @Entity('notifications')
-export class Notification {
+export class Notification extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -34,12 +33,6 @@ export class Notification {
 
   @Column({ default: false })
   isRead: boolean;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'userId' })

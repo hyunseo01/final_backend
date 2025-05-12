@@ -2,16 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/user/entities/user.entity';
 import { Schedule } from '../../schedules/entities/schedule.entity';
+import { BaseTimeEntity } from '../../common/utils/baseTime.entity';
 
 @Entity('reservations')
-export class Reservation {
+export class Reservation extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,12 +19,6 @@ export class Reservation {
 
   @Column({ nullable: true })
   scheduleId: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'userId' })

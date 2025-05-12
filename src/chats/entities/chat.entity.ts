@@ -2,14 +2,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/user/entities/user.entity';
+import { BaseTimeEntity } from '../../common/utils/baseTime.entity';
 
 @Entity('chats')
-export class Chat {
+export class Chat extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,9 +18,6 @@ export class Chat {
 
   @Column({ nullable: true })
   trainerId: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'userId' })
