@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -11,6 +12,7 @@ import { Repository } from 'typeorm';
 import { UserRole } from '../common/enums/user-role.enum';
 import { SigninDto } from './dto/Signin.dto';
 import { User } from '../users/user/entities/user.entity';
+import { UpdatePasswordDto } from './dto/updatePassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +57,28 @@ export class AuthService {
       data: {
         accessToken: token,
       },
+    };
+  }
+
+  async updatePassword(userid: number, dto: UpdatePasswordDto) {
+    const user = await this.userRepository.findOneBy({ id: userid });
+    if (!user)
+      throw new UnauthorizedException('해당 유저가 존재하지 않습니다.');
+
+    const isMatch = await bcrypt.compare(dto.oldPassword, user.password);
+    if (!isMatch)
+      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+    if (dto.newPassword != dto.confirmPassword)
+      throw new BadRequestException(
+        '입력한 비밀번호와 확인 비밀번호가 일치하지 않습니다.',
+      );
+
+    const hashed = await bcrypt.hash(dto.newPassword, 10);
+    await this.userRepository.update(user.id, { password: hashed });
+
+    return {
+      message: '비밀번호 변경이 완료되었습니다.',
+      data: null,
     };
   }
 }
