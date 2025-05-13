@@ -23,6 +23,9 @@ export class Message extends BaseTimeEntity {
   @Column({ nullable: true, type: 'text' })
   content: string;
 
+  @Column({ default: false })
+  isRead: boolean;
+
   @ManyToOne(() => Chat, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'chatId' })
   chat: Chat;
